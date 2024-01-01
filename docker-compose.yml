@@ -1,0 +1,120 @@
+version: '3.1'
+
+services:
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    networks:
+      - TrackingNetwork
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - TrackingNetwork
+
+  #Monque les fastAPI, frontend, consumer, producer, etc
+  consumer:
+    build:
+      context: ./consumer
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      - TrackingNetwork
+
+  producer:
+    build:
+      context: ./producer
+    depends_on:
+      - kafka
+      - consumer
+    networks:
+      - TrackingNetwork
+      
+  api:
+    build:
+      context: ./api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      - TrackingNetwork
+
+  frontend:
+    build:
+      context: ./front
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
+    networks:
+      - TrackingNetwork
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - TrackingNetwork
+
+  # producer_ip1:
+  #   build:
+  #     context: ./producer_ip1
+  #   depends_on:
+  #     - kafka
+
+  # producer_ip2:
+  #   build:
+  #     context: ./producer_ip2
+  #   depends_on:
+  #     - kafka
+
+  # api:
+  #   build:
+  #     context: ./api
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - api
+
+
+networks:
+  TrackingNetwork:
+    # driver: bridge
+
+
+volumes:
+  kafka_data:
+    # driver: local
