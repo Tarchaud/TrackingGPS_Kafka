@@ -2,7 +2,7 @@ const kafka = require('kafka-node');
 const pg = require('pg');
 
 const client = new kafka.KafkaClient({ kafkaHost: 'kafka:9092' });
-const consumer = new kafka.Consumer(client, [{ topic: 'gps-movement' }]);
+const consumer = new kafka.Consumer(client, [{ topic: 'coordinates' }]);
 
 const pgClient = new pg.Client({
     user: 'myuser',

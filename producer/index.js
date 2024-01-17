@@ -3,11 +3,11 @@ const config = require('config');
 
 const client = new kafka.KafkaClient({ kafkaHost: 'kafka:9092' });
 const producer = new kafka.Producer(client);
-const topic = 'gps-movement';
+const topic = 'coordinates';
 
 
 producer.on('ready', () => {
-    console.log('Producer is ready');
+  console.log('Producer is ready');
     // Fonction pour générer des coordonnées GPS aléatoires avec déplacement simulé
   const generateCoordinatesWithMovement = (currentCoordinates) => {
     const newLatitude = currentCoordinates.latitude + (Math.random() - 0.5) * 0.002; // Changement aléatoire dans la latitude

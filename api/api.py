@@ -1,37 +1,4 @@
 
-# from fastapi import FastAPI, HTTPException
-# from typing import List
-# import asyncpg
-
-# app = FastAPI()
-
-# # Remplacez ces valeurs par vos informations de connexion PostgreSQL
-# DATABASE_USER = 'myuser'
-# DATABASE_PASSWORD = 'mypassword'
-# DATABASE_NAME = 'mydb'
-# DATABASE_HOST = 'postgres'
-
-# # Connexion à la base de données
-# async def connect_to_db():
-#     return await asyncpg.connect(
-#         user=DATABASE_USER,
-#         password=DATABASE_PASSWORD,
-#         database=DATABASE_NAME,
-#         host=DATABASE_HOST
-#     )
-
-# # Route pour récupérer toutes les coordonnées GPS depuis la base de données
-# @app.get("/coordinates", response_model=List[dict]) 
-# async def get_coordinates():
-#     try:
-#         conn = await connect_to_db()
-#         coordinates = await conn.fetch('SELECT * FROM coordinates LIMIT 50 ')
-#         await conn.close()
-#         return coordinates
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
-
-
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 import asyncpg
@@ -65,7 +32,7 @@ async def send_updates():
     try:
         while True:
             conn = await connect_to_db()
-            records = await conn.fetch('SELECT * FROM coordinates ORDER BY id DESC LIMIT 1')
+            records = await conn.fetch('SELECT DISTINCT ON (ip) id, ip, latitude, longitude FROM coordinates ORDER BY ip, id DESC')
             await conn.close()
             
             coordinates = [dict(record) for record in records]

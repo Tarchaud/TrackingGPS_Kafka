@@ -34,13 +34,14 @@ services:
     networks:
       - TrackingNetwork
 
-  #Monque les fastAPI, frontend, consumer, producer, etc
   consumer:
     build:
       context: ./consumer
     depends_on:
       - kafka
       - postgres
+      - producer1
+      - producer2
     networks:
       - TrackingNetwork
 
@@ -49,7 +50,6 @@ services:
       context: ./producer
     depends_on:
       - kafka
-      - consumer
     networks:
       - TrackingNetwork
     environment:
@@ -61,7 +61,20 @@ services:
       context: ./producer
     depends_on:
       - kafka
-      - consumer
+    networks:
+      - TrackingNetwork
+    environment:
+      - NODE_ENV=ip2
+    command: npm start
+      
+  api:
+    build:
+      context: ./api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - kafka
+      - postgres
     networks:
       - TrackingNetwork
 
@@ -83,39 +96,10 @@ services:
     networks:
       - TrackingNetwork
 
-  # producer_ip1:
-  #   build:
-  #     context: ./producer_ip1
-  #   depends_on:
-  #     - kafka
-
-  # producer_ip2:
-  #   build:
-  #     context: ./producer_ip2
-  #   depends_on:
-  #     - kafka
-
-  # api:
-  #   build:
-  #     context: ./api
-  #   depends_on:
-  #     - kafka
-  #     - postgres
-
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - api
-
 
 networks:
   TrackingNetwork:
-    # driver: bridge
 
 
 volumes:
   kafka_data:
-    # driver: local
