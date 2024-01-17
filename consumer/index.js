@@ -24,8 +24,8 @@ consumer.on('message', async (message) => {
     // Insertion des données dans PostgreSQL
     try {
         await pgClient.query(
-        'INSERT INTO coordinates (latitude, longitude) VALUES ($1, $2)',
-        [data.latitude, data.longitude]
+        'INSERT INTO coordinates (ip, latitude, longitude) VALUES ($1, $2, $3)',
+        [data.ip, data.latitude, data.longitude]
         );
         console.log('Data inserted into PostgreSQL');
     } catch (error) {

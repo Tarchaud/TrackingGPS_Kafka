@@ -44,7 +44,7 @@ services:
     networks:
       - TrackingNetwork
 
-  producer:
+  producer1:
     build:
       context: ./producer
     depends_on:
@@ -52,15 +52,16 @@ services:
       - consumer
     networks:
       - TrackingNetwork
-      
-  api:
+    environment:
+      - NODE_ENV=ip1
+    command: npm start
+
+  producer2:
     build:
-      context: ./api
-    ports:
-      - "8000:8000"
+      context: ./producer
     depends_on:
       - kafka
-      - postgres
+      - consumer
     networks:
       - TrackingNetwork
 
