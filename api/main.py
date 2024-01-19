@@ -3,13 +3,12 @@ from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 import asyncpg
 import asyncio
-import websockets
 from fastapi.websockets import WebSocketDisconnect
 import json
 
 app = FastAPI()
 
-# Remplacez ces valeurs par vos informations de connexion PostgreSQL
+# Variables de configuration de la base de données
 DATABASE_USER = 'myuser'
 DATABASE_PASSWORD = 'mypassword'
 DATABASE_NAME = 'mydb'

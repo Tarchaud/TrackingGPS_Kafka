@@ -3,6 +3,7 @@ version: '3.1'
 services:
   kafka:
     image: bitnami/kafka:latest
+    restart: always
     ports:
       - "9092:9092"
     volumes:
@@ -23,6 +24,7 @@ services:
 
   postgres:
     image: postgres:latest
+    restart: always
     environment:
       POSTGRES_DB: mydb
       POSTGRES_USER: myuser
@@ -37,6 +39,7 @@ services:
   consumer:
     build:
       context: ./consumer
+    restart: always
     depends_on:
       - kafka
       - postgres
@@ -48,6 +51,7 @@ services:
   producer1:
     build:
       context: ./producer
+    restart: always
     depends_on:
       - kafka
     networks:
@@ -59,6 +63,7 @@ services:
   producer2:
     build:
       context: ./producer
+    restart: always
     depends_on:
       - kafka
     networks:
@@ -70,6 +75,7 @@ services:
   api:
     build:
       context: ./api
+    restart: always
     ports:
       - "8000:8000"
     depends_on:
@@ -81,6 +87,7 @@ services:
   frontend:
     build:
       context: ./front
+    restart: always
     ports:
       - "4200:4200"
     depends_on:

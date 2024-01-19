@@ -5,8 +5,7 @@ WORKDIR /app
 COPY . /app/
 
 # Installation des dépendances
-RUN pip install fastapi uvicorn asyncpg asyncio websockets
-
+RUN pip install -r requirements.txt
 
 # Commande pour exécuter l'application
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
