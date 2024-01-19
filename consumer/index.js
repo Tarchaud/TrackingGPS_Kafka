@@ -16,10 +16,8 @@ pgClient.connect();
 
 
 consumer.on('message', async (message) => {
-    console.log("message : ", message);
     console.log('Received message:', message);
     const data = JSON.parse(message.value);
-    console.log('Data:', data);
 
     // Insertion des données dans PostgreSQL
     try {

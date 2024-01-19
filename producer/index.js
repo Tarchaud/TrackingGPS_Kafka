@@ -19,13 +19,13 @@ producer.on('ready', () => {
     };
   };
   
-  // Coordonnées de départ (par exemple, une localisation initiale)
+  // Coordonnées de départ
   let currentLocation = { latitude: config.get("latitude"), longitude: config.get("longitude") };
   
   // Envoi de coordonnées GPS avec déplacement simulé au topic Kafka
   const sendCoordinates = () => {
     const newCoordinates = generateCoordinatesWithMovement(currentLocation);
-    const message = { ip : config.get("ip"), ...newCoordinates};
+    const message = { ip : config.get("id"), ...newCoordinates};
   
     const payloads = [
       {
@@ -45,7 +45,7 @@ producer.on('ready', () => {
   };
   
   // Envoi de coordonnées GPS à intervalles réguliers
-  setInterval(sendCoordinates, 1000); // Envoi toutes les secondes 1000
+  setInterval(sendCoordinates, 1000);
 });
 
 
