@@ -1,1 +1,1 @@
-Script sql pour initialer la db
+# Script sql pour initialer la db
