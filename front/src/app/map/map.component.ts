@@ -25,7 +25,7 @@ export class MapComponent  implements OnInit{
   }
 
   private initMap(): void {
-    this.map = L.map('map').setView([46.6031, 1.8883], 5);
+    this.map = L.map('map').setView([48.8566, 2.3522], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
