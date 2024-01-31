@@ -83,3 +83,4 @@ Reçoit et traite les messages envoyés par le producer. Un consumer par marqueu
 ### Volumes :
 
 - Un volume nommé `kafka_data` est utilisé pour assurer la persistance des données du système.
+- Un volume nommé `postgres_data` est utilisé pour assurer la persistance des données dans la database.
