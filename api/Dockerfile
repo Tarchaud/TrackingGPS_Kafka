@@ -4,6 +4,7 @@ FROM python
 WORKDIR /app
 COPY . /app/
 
+RUN pip install --upgrade pip
 # Installation des dépendances
 RUN pip install -r requirements.txt
 

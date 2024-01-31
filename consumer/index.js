@@ -2,6 +2,29 @@ const kafka = require('kafka-node');
 const pg = require('pg');
 
 const client = new kafka.KafkaClient({ kafkaHost: 'kafka:9092' });
+
+client.topicExists('coordinates', (error, exists) => {
+    if (exists) {
+        console.log('Topic exists');
+        return;
+    }
+    console.log('Topic does not exist');
+    const topics = [
+        {
+            topic: 'coordinates',
+            partitions: 1,
+            replicationFactor: 1
+        }
+    ];
+    client.createTopics(topics, (error, result) => {
+        if (error) {
+            console.error('Error creating topics:', error);
+            return;
+        }
+        console.log('Result :', result);
+    });
+});
+
 const consumer = new kafka.Consumer(client, [{ topic: 'coordinates' }]);
 
 const pgClient = new pg.Client({

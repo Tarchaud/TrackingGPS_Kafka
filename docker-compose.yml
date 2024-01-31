@@ -10,6 +10,7 @@ services:
       - "kafka_data:/bitnami"
       - ./kafka-init.sh:/docker-entrypoint-init.d/kafka-init.sh
     environment:
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       # KRaft settings
       - KAFKA_CFG_NODE_ID=0
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
@@ -44,8 +45,6 @@ services:
     depends_on:
       - kafka
       - postgres
-      - producer1
-      - producer2
     networks:
       - TrackingNetwork
 
@@ -80,7 +79,6 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - kafka
       - postgres
     networks:
       - TrackingNetwork
